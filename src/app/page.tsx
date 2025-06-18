@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 interface Advocate {
+  id: string;
   firstName: string;
   lastName: string;
   city: string;
@@ -50,7 +51,6 @@ export default function Home() {
   };
 
   const onClick = () => {
-    console.log(advocates);
     setFilteredAdvocates(advocates);
   };
 
@@ -84,14 +84,14 @@ export default function Home() {
         <tbody>
           {filteredAdvocates.map((advocate:Advocate) => {
             return (
-              <tr>
+              <tr key={`${advocate.id}`}>
                 <td>{advocate.firstName}</td>
                 <td>{advocate.lastName}</td>
                 <td>{advocate.city}</td>
                 <td>{advocate.degree}</td>
                 <td>
                   {advocate.specialties.map((s) => (
-                    <div>{s}</div>
+                    <div key={`${s}`}>{s}</div>
                   ))}
                 </td>
                 <td>{advocate.yearsOfExperience}</td>
