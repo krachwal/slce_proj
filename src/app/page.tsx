@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 interface Advocate {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   city: string;
@@ -18,7 +18,7 @@ export default function Home() {
   const [filteredAdvocates, setFilteredAdvocates] = useState([]);
 
   useEffect(() => {
-    console.log("fetching advocates...");
+    console.debug("fetching advocates...");
     fetch("/api/advocates").then((response) => {
       response.json().then((jsonResponse) => {
         setAdvocates(jsonResponse.data);
@@ -35,7 +35,7 @@ export default function Home() {
       searchTermElement.innerHTML = searchTerm;
     }
 
-    console.log("filtering advocates...");
+    console.debug("filtering advocates...");
     const filteredAdvocates = advocates.filter((advocate:Advocate) => {
       return (
         advocate.firstName.includes(searchTerm) ||
