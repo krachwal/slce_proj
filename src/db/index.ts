@@ -5,11 +5,7 @@ import * as schema from './schema';
 const setup = () => {
   if (!process.env.DATABASE_URL) {
     console.error("DATABASE_URL is not set");
-    return {
-      select: () => ({
-        from: () => [],
-      }),
-    };
+    process.exit(1); // Stop the process - in production no DB connection string would be a critical error
   }
 
   // for query purposes
