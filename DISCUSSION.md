@@ -2,3 +2,4 @@
 - Ideally would want to support combo filters that populate a tag-like list of filters that are being applied at once (logical `AND` would be helpful for specialties, for example) which could be cleared individually 🪄  
 - Would be great to get a designer to make it pretty... ✨ I really should have ripped the styles off of the Solace web presence 😬 🙈  
 - Depending on whether or not the team is into it, could make the migration execution part of the docker-compose and could also roll the web app in to get a more realistic representation of the production environment. As the org grows and there are more services it's nice to have a full integration environment locally when you're working on APIs and multi-service changes.
+- Oh and end-to-end tests would be great! I should have at least added cypress 🌲 or playwright. 🎭
