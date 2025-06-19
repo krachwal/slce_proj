@@ -18,16 +18,19 @@ export default function Home() {
   const [filteredAdvocates, setFilteredAdvocates] = useState([]);
   const [sortConfig, setSortConfig] = useState<{ key: keyof Advocate; direction: "asc" | "desc" } | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     console.debug("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
+    fetch(`/api/advocates?search=${searchTerm}&page=${currentPage}&limit=20`).then((response) => {
       response.json().then((jsonResponse) => {
         setAdvocates(jsonResponse.data);
         setFilteredAdvocates(jsonResponse.data);
+        setTotalPages(Math.ceil(jsonResponse.meta.total / jsonResponse.meta.limit));
       });
     });
-  }, []);
+  }, [searchTerm, currentPage]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value.toLowerCase(); // Convert search term to lowercase
@@ -87,20 +90,32 @@ export default function Home() {
     setFilteredAdvocates(filteredByTag);
   };
 
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
-    <main className="text-stone-800" style={{ margin: "24px" }}>
+    <main className="text-stone-800 m-6">
       <h1 className="text-3xl font-bold text-left p-4 mb-0">
         Solace Advocates
       </h1>
       <div className="mb-2">
         <div className="flex items-center space-x-4 max-w-1/3">
           <input
-  placeholder="search..."
+  placeholder="filter..."
   className="flex-grow shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
   value={searchTerm} 
   onChange={onChange}
 />
-          <button className="bg-stone-500 hover:bg-stone-300 text-white font-bold py-1 px-2 rounded" onClick={onClick}>Reset Search</button>
+          <button className="bg-stone-500 hover:bg-stone-300 text-white font-bold py-1 px-2 rounded" onClick={onClick}>Reset Filters</button>
         </div>
       </div>
       <table className="table-auto w-full border-collapse border-t border-b border-stone-200 font-sans">
@@ -142,6 +157,25 @@ export default function Home() {
           })}
         </tbody>
       </table>
+      <div className="flex justify-between items-center mt-4">
+  <button
+    className="bg-stone-500 hover:bg-stone-300 text-white font-bold py-1 px-2 rounded"
+    onClick={handlePreviousPage}
+    disabled={currentPage === 1}
+  >
+    Previous
+  </button>
+  <span className="text-stone-700">
+    Page {currentPage} of {totalPages}
+  </span>
+  <button
+    className="bg-stone-500 hover:bg-stone-300 text-white font-bold py-1 px-2 rounded"
+    onClick={handleNextPage}
+    disabled={currentPage === totalPages}
+  >
+    Next
+  </button>
+</div>
     </main>
   );
 }
