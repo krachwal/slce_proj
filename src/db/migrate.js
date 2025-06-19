@@ -16,12 +16,10 @@ const runMigration = async () => {
 runMigration()
   .then(() => {
     console.log("Successfully ran migration.");
-
     process.exit(0);
   })
   .catch((e) => {
     console.error("Failed to run migration.");
     console.error(e);
-
     process.exit(1);
   });
